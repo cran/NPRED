@@ -1,6 +1,6 @@
 skip('skip')
 
-#devtools::install_github("zejiang-unsw/NPRED")
+#devtools::install_github("zejiang-unsw/NPRED@v1.0.3")
 library(NPRED)
 
 #-----------------------------------------------------------------
