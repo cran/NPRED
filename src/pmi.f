@@ -235,7 +235,7 @@ c
 	  score = score + product
 270	continue
 
-	amiscore = score / dfloat(nx)
+	amiscore = score / dble(nx)
 c	if(nv.le.2.and.amiscore.lt.0.0)amiscore=0.0
 c	following is commented as MI of multi-dimensional variables(gt than 2) can be negative as well
 c	however, check for such instances
@@ -277,9 +277,9 @@ c***********************************************************************
 	dimension stin(nvmax,nvmax)
  
  
-        piden = (pi*2.0) ** (dfloat(nv)/2.0) * dfloat(nx-1)
+        piden = (pi*2.0) ** (dble(nv)/2.0) * dble(nx-1)
   
-	  al=dfloat(nv)
+	  al=dble(nv)
 c        h=1.0/h
 c	find gamma bandwidths
 c	do i=1,nx
@@ -341,8 +341,8 @@ c
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
         subroutine calc_href(nx,nv,h)
       Implicit double precision (A-H,O-Z) 
-	fac = (4.d0/(dfloat(nv)+2.d0))**(1.d0/(dfloat(nv)+4.d0))
- 	h = fac * dfloat(nx)**(-1.d0/(dfloat(nv)+4.d0))
+	fac = (4.d0/(dble(nv)+2.d0))**(1.d0/(dble(nv)+4.d0))
+ 	h = fac * dble(nx)**(-1.d0/(dble(nv)+4.d0))
 c 	write(3,*) 'h=', h
         return
         end

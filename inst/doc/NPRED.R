@@ -84,10 +84,10 @@ if (TRUE) {
 
   plot(xhat1, xhat2, xlim = c(-10, 10), ylim = c(-10, 10))
   abline(coef = c(0, 1), lwd = 1, col = 2)
+  par(op)
 }
 
 ## ----weights, fig.cap='Illustration of the usage of partial weights', fig.height=6, fig.width=9, out.width='100%'----
-par(op)
 sample <- 500
 k <- 0
 u <- runif(sample, 0, 5 * pi)
