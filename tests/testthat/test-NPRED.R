@@ -104,7 +104,7 @@ NPRED::stepwise.PIC(data3[,1],data3[,-1])
 # 0.02333108 0.91358821 
 
 #-----------------------------------------------------------------
-# set.seed(2020)
+set.seed(2020)
 # AR1 model from paper with 9 dummy variables
 data.ar1<-data.gen.ar1(500)
 stepwise.PIC(data.ar1$x,data.ar1$dp)

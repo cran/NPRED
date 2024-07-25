@@ -1,61 +1,61 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
-  echo = TRUE,
-  collapse = TRUE,
-  comment = "#>",
+  echo = TRUE, collapse = TRUE, comment = "#>", warning = FALSE,
   
-  out.width='85%',
+  out.width='100%',
   fig.align = "center", fig.pos = "h!"
 )
 
 ## ----setup--------------------------------------------------------------------
 library(NPRED)
-
-op <- par()
 require(zoo)
 require(ggplot2)
 
 ## ----dat, fig.cap='Example of AR models', fig.height=5, fig.width=9-----------
 # Other statistical models for generating synthetic data see Package - synthesis
-# require(synthesis)
+require(synthesis)
 
 set.seed(2020) # set seed for reproducible results
 # AR1 model from paper with 9 dummy variables
-data.ar1 <- data.gen.ar1(500)
+data.ar1 <- synthesis::data.gen.ar1(500)
 
 # AR4 model from paper with total 9 dimensions
-data.ar4 <- data.gen.ar4(500)
+data.ar4 <- synthesis::data.gen.ar4(500)
 
 # AR9 model from paper with total 9 dimensions
-data.ar9 <- data.gen.ar9(500)
+data.ar9 <- synthesis::data.gen.ar9(500)
 
-plot.zoo(cbind(data.ar1$x, data.ar4$x, data.ar9$x),
-  xlab = NA, main = "Example of AR models",
-  ylab = c("AR1", "AR4", "AR9"))
+# plot.zoo(cbind(data.ar1$x, data.ar4$x, data.ar9$x),
+#   xlab = NA, main = "Example of AR models",
+#   ylab = c("AR1", "AR4", "AR9"))
 
 ## ----pic----------------------------------------------------------------------
-# R version of pic
-pic.calc(data.ar9$x, data.ar9$dp)
+# calculate PIC
+pic.calc(data.ar1$x, data.ar1$dp)
 
-# fortran version of pic
-calc.PIC(data.ar9$x, data.ar9$dp)
+pic.calc(data.ar4$x, data.ar4$dp)
+
+pic.calc(data.ar9$x, data.ar9$dp)
 
 
 ## ----fig, fig.cap='Example of PIC selection implemented in NPRED', fig.height=5, fig.width=9----
-# pic <- stepwise.PIC(data.ar1$x, data.ar1$dp)
-# pic <- stepwise.PIC(data.ar4$x, data.ar4$dp)
-pic <- stepwise.PIC(data.ar9$x, data.ar9$dp)
-pic
+pic1 <- stepwise.PIC(data.ar1$x, data.ar1$dp)
+
+pic4 <- stepwise.PIC(data.ar4$x, data.ar4$dp)
+
+pic9 <- stepwise.PIC(data.ar9$x, data.ar9$dp)
+
 
 ## ----pw-----------------------------------------------------------------------
-# R version of pw
-pw.calc(data.ar9$x, data.ar9$dp, pic$cpy, pic$cpyPIC)
+# calculate partial weights
+pw.calc(data.ar1$x, data.ar1$dp, pic1$cpy, pic1$cpyPIC)
 
-# fortran version of pw
-calc.PW(data.ar9$x, data.ar9$dp, pic$cpy, pic$cpyPIC)
+pw.calc(data.ar4$x, data.ar4$dp, pic4$cpy, pic4$cpyPIC)
+
+pw.calc(data.ar9$x, data.ar9$dp, pic9$cpy, pic9$cpyPIC)
 
 
-## ----knn, fig.cap='Example of KNN implemented in NPRED', fig.height=5, fig.width=9----
+## ----knn, fig.cap='Example of KNN implemented in NPRED', fig.height=5,fig.width=9----
 data("data3")
 x <- ts(data3[, 1]) # response
 z <- ts(data3[, -1]) # possible predictors
@@ -71,7 +71,9 @@ for (i in 1:500) {
 }
 
 if (TRUE) {
-  par(mfrow = c(1, 2), pty = c("s"))
+  par(mfrow = c(1, 1),
+      mar=c(3,2,1,1), mgp=c(1.5,0.5,0),
+      pty = c("m"))
 
   ts.plot(x, xhat1, xhat2, col = c("black","red","blue"), ylim = c(-10, 10), lwd = c(1, 1, 1))
   legend("topleft",
@@ -79,15 +81,15 @@ if (TRUE) {
     # inset = c(-0.5, 0),
     legend = c("OBS", "Pred", "Pred(extrap=T)"),
     x.intersp = 0, xjust = 0, yjust = 0, text.width = c(0, 50, 50), horiz = T,
-    col = c("black","red","blue")
-  )
+    col = c("black","red","blue"))
 
+  par(mfrow = c(1, 1), pty = c("s"))
   plot(xhat1, xhat2, xlim = c(-10, 10), ylim = c(-10, 10))
   abline(coef = c(0, 1), lwd = 1, col = 2)
-  par(op)
+
 }
 
-## ----weights, fig.cap='Illustration of the usage of partial weights', fig.height=6, fig.width=9, out.width='100%'----
+## ----weights, fig.cap='Illustration of the usage of partial weights', fig.height=6, fig.width=9----
 sample <- 500
 k <- 0
 u <- runif(sample, 0, 5 * pi)
@@ -103,20 +105,24 @@ sel
 zhat2 <- sapply(1:sample, function(i) knn(x = z[-i], z = u1[-i, sel$cpy], zout = u1[i, sel$cpy], k = k))
 
 if (TRUE) {
+  par(mfrow = c(1, 1), pty = c("m"))
+  
   plot(u, z, pch = 16)
   lines(sort(u), zhat1[order(u)], col = "green")
   lines(sort(u), zhat2[order(u)], col = "red")
   abline(a = 0, b = 0)
 }
 
-## ----exp, warning=FALSE, fig.cap='Application to predicting drought anomalies', fig.height=9, fig.width=7, out.width='100%'----
+## ----exp, warning=FALSE, fig.cap='Application to predicting drought anomalies', fig.height=9, fig.width=7----
 # An demo example used in Jiang, Z., Rashid, M. M., Johnson, F., & Sharma, A. (2020)
-# Jiang, Z., Rashid, M. M., Johnson, F., & Sharma, A. (2021). A wavelet-based tool to modulate variance in predictors: An application to predicting drought anomalies. Environmental Modelling and Software, 135, 104907. https://doi.org/10.1016/j.envsoft.2020.104907 
-require(WASP) 
+# Jiang, Z., Rashid, M. M., Johnson, F., & Sharma, A. (2021). A wavelet-based tool to modulate variance in predictors: An application to predicting drought anomalies. Environmental Modelling and Software, 135, 104907.
 
-#-------------------------------------------------------------------------------------
+require(WASP)
 #load response and predictor variables
-data(SPI.12); data(data.CI); data(Ind_AWAP.2.5)
+data("SPI.12", package="WASP"); 
+data("data.CI", package="WASP")
+data("Ind_AWAP.2.5", package="WASP")
+
 #study grids and period
 Grid <- sample(Ind_AWAP.2.5,1)
 Grid = 149 #Grid used in the SI
@@ -151,7 +157,7 @@ mod <- knn(x, z, zout, k=5, pw=wt, extrap=T)
 start.cal <- c(1910,1); start.val <- c(1960,1)
 ndim = ncol(data.CI.ts); CI.names = colnames(data.CI.ts)
 par(mfcol=c(ndim+1,2),mar=c(2,4,2,2),mgp=c(1.5,0.5,0),
-    bg = "white",pty="m", cex.lab=1.5, ps=8)
+    bg = "white",pty="m",cex.lab=1.5,ps=8)
 #----------------------------------------------
 #plot before and after vt - calibration
 if(TRUE){
@@ -181,5 +187,4 @@ if(TRUE){
 
 }
 
-par(op)
 

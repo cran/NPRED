@@ -3,7 +3,7 @@
 Predictor Identifier: Nonparametric PREDiction (NPRED)
 Partial informational correlation (PIC) is used to identify the meaningful predictors to the response from a large set of potential predictors.
 
-The initial version of NPRED is at [Hydrology@UNSW](https://www.hydrology.unsw.edu.au/download/software/npred). This is a new version of NPRED without calling Fortran codes.
+The initial version of NPRED is at [Hydrology@UNSW](https://www.unsw.edu.au/research/hydrology-group/our-resources/npred). This is a new version of NPRED without calling Fortran codes.
 
 Applications of this package can be found in: 
 * Jiang, Z., Sharma, A., & Johnson, F. (2021). Variable transformations in the spectral domain – Implications for hydrologic forecasting. Journal of Hydrology, 126816. [doi](https://doi.org/10.1016/J.JHYDROL.2021.126816)

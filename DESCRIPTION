@@ -1,6 +1,6 @@
 Package: NPRED
 Title: Predictor Identifier: Nonparametric Prediction
-Version: 1.0.7
+Version: 1.1.0
 Authors@R: 
     c(person(given = "Ashish",
            family = "Sharma",
@@ -36,9 +36,9 @@ BugReports: https://github.com/zejiang-unsw/NPRED/issues
 Imports: stats
 Suggests: zoo, SPEI, WASP, knitr, ggplot2, synthesis, testthat,
         bookdown, rmarkdown
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr
-NeedsCompilation: yes
-Packaged: 2023-06-21 12:23:40 UTC; Ze
+NeedsCompilation: no
+Packaged: 2024-07-25 00:31:24 UTC; z5154277
 Repository: CRAN
-Date/Publication: 2023-06-21 12:50:02 UTC
+Date/Publication: 2024-07-25 08:50:01 UTC
